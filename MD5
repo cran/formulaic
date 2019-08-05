@@ -1,0 +1,15 @@
+63e6d03cc49c785daf159f8b4ab9f0d4 *DESCRIPTION
+63aea0079522d944858d1aa62c156783 *NAMESPACE
+7e5f44bff59a7f65c42e1ebbd6697305 *R/create.formula.R
+43508ca9a0e874ddf393fbfd165ed366 *R/snack.dat.R
+bcd9632cca8757ecd65ec7e68cb32711 *README.md
+6b03d99ed348dc347c8801758ff9f23f *build/vignette.rds
+dfb9e2cbf23dc497a3c7f31f08063479 *data/snack.dat.rda
+0344df28673d2667f92c4a31cd1987c6 *inst/doc/Introduction-to-formulaic.R
+11bd989bb513ff32c1449640c74f3777 *inst/doc/Introduction-to-formulaic.Rmd
+dd8ffa7c0e2900b9e806048c93e4f7f4 *inst/doc/Introduction-to-formulaic.html
+1eaeca044d68e33dbd9796182226953f *man/add.backtick.Rd
+b49e7bd62f8fb72aade698e1b38e9288 *man/create.formula.Rd
+0abe0363ab860ac7eb72b0c312621a6d *man/reduce.existing.formula.Rd
+bf175fbb93d4630bf23bd2ad4d8e6470 *man/snack.dat.Rd
+11bd989bb513ff32c1449640c74f3777 *vignettes/Introduction-to-formulaic.Rmd
