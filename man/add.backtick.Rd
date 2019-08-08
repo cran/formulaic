@@ -2,15 +2,15 @@
 % Please edit documentation in R/create.formula.R
 \name{add.backtick}
 \alias{add.backtick}
-\title{Add backticks}
+\title{Add backtick}
 \usage{
 add.backtick(x, include.backtick = "as.needed")
 }
 \arguments{
-\item{x}{variables}
+\item{x}{Character value specifying the name of input parameters.}
 
 \item{include.backtick}{specifies whether a backtick should be added. Parameter values should be either 'all' or 'as.needed'}
 }
 \description{
-add.backtick is subsidiary function to create.formula that add backticks to the names of the variables.
+Function that add backticks to the names of the variables.
 }
