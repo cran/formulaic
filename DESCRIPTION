@@ -1,6 +1,6 @@
 Package: formulaic
 Title: Dynamic Generation and Quality Checks of Formula Objects
-Version: 0.0.3
+Version: 0.0.4
 Authors@R: c(
     person("David", "Shilane", , "david.shilane@columbia.edu", c("aut")),
     person("Caffrey", "Lee", , "cl3802@columbia.edu", c("ctb")),
@@ -16,14 +16,14 @@ Encoding: UTF-8
 LazyData: TRUE
 RoxygenNote: 6.1.1
 Imports: data.table, stats, DT
-Suggests: knitr, rmarkdown, testthat
+Suggests: knitr, rmarkdown, testthat (>= 2.1.0)
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2019-08-30 11:05:29 UTC; ander
+Packaged: 2019-10-08 20:41:04 UTC; ander
 Author: David Shilane [aut],
   Caffrey Lee [ctb],
   Zichen Huang [ctb],
   Anderson Nelson [ctb, cre]
 Maintainer: Anderson Nelson <an2908@columbia.edu>
 Repository: CRAN
-Date/Publication: 2019-08-30 22:30:02 UTC
+Date/Publication: 2019-10-08 21:00:06 UTC
