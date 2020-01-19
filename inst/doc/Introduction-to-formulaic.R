@@ -83,12 +83,12 @@ create.formula(
 )$formula
 
 ## ----create.formula examples basic--------------------------------------------
-outcome.name.awareness <- "Awareness"
+
 input.names <-
   c("Age", "Gender", "Income", "Region", "Persona", "Typo")
 
 basic.form <-
-  create.formula(outcome.name = outcome.name.awareness,
+  create.formula(outcome.name = awareness.name,
                  input.names = input.names,
                  dat = snack.dat)
 
@@ -101,7 +101,7 @@ interactions = list(c("Age Group", "Gender"),
 
 interaction.form <-
   create.formula(
-    outcome.name = outcome.name.awareness,
+    outcome.name = awareness.name,
     input.names = input.names,
     dat = snack.dat,
     interactions = interactions
@@ -115,7 +115,7 @@ input.patterns = c("Gend", bp.pattern)
 
 pattern.form <-
   create.formula(
-    outcome.name = outcome.name.awareness,
+    outcome.name = awareness.name,
     input.names = input.names,
     dat = snack.dat,
     input.patterns = input.patterns
@@ -125,7 +125,7 @@ print(pattern.form)
 
 ## ----create.formula example dot.1---------------------------------------------
 dot.form.1 <-
-  create.formula(outcome.name = outcome.name.awareness,
+  create.formula(outcome.name = awareness.name,
                  input.names = ".",
                  dat = snack.dat)
 
@@ -135,7 +135,7 @@ print(dot.form.1)
 
 input.names = c("Gender", ".")
 
-dot.form.2 <- create.formula(outcome.name = outcome.name.awareness, input.names = input.names, dat = snack.dat)
+dot.form.2 <- create.formula(outcome.name = awareness.name, input.names = input.names, dat = snack.dat)
 
 print(dot.form.2)
 
@@ -143,7 +143,7 @@ print(dot.form.2)
 
 input.names = c("Typo", ".")
 
-dot.form.2 <- create.formula(outcome.name = outcome.name.awareness, input.names = input.names, dat = snack.dat)
+dot.form.2 <- create.formula(outcome.name = awareness.name, input.names = input.names, dat = snack.dat)
 
 print(dot.form.2)
 
@@ -169,7 +169,7 @@ variables.to.exclude = c("BP_Delicious_0_10", "Gender")
 
 variables.to.exclude.form <-
   create.formula(
-    outcome.name = outcome.name.awareness,
+    outcome.name = awareness.name,
     input.names = input.names,
     interactions = interactions,
     input.patterns = bp.pattern,
@@ -198,7 +198,7 @@ duplicated.interactions <-
 
 duplicated.form <-
   create.formula(
-    outcome.name = outcome.name.awareness,
+    outcome.name = awareness.name,
     input.names = duplicated.inputs,
     interactions = duplicated.interactions,
     dat = snack.dat
