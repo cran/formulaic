@@ -8,7 +8,8 @@
 
 add.backtick <- function(x, include.backtick = "as.needed"){
   if(include.backtick == "all"){
-    w <- 1:length(x)
+    w <- seq_along(x)
+
   }
   if (include.backtick == "as.needed") {
     w <- grep(pattern = " ",
@@ -43,7 +44,8 @@ add.backtick <- function(x, include.backtick = "as.needed"){
 #' @details  Return as the data type of the output.  If not set as "formula", then a character vector will be returned.
 #' The input.names and names of variables matching the input.patterns will be concatenated to form the full list of input variables.
 #'
-#' @import data.table
+#' @import data.table stats
+#'
 #' @export
 #' @examples
 #'  n <- 10
@@ -52,7 +54,7 @@ add.backtick <- function(x, include.backtick = "as.needed"){
 #'  dd[, y := 5 * x + 3 * pixel_1 + 2 * pixel_2 + rnorm(n)]
 #'
 #'  create.formula(outcome.name = "y", input.names = "x", input.patterns = c("pi", "xel"), dat = dd)
-#' @import stats
+#'
 #' @export
 create.formula <-
   function(outcome.name,
@@ -101,12 +103,12 @@ create.formula <-
           "Error:  To create a formula, the outcome.name must match one of the values in names(dat)."
         )
       }
-      variable.names.from.exclude <- c()
+      variable.names.from.exclude <- NULL
       if (!is.null(variables.to.exclude)) {
         variable.names.from.exclude <- unique(variables.to.exclude)
       }
 
-      variable.names.from.patterns <- c()
+      variable.names.from.patterns <- NULL
 
       if (!is.null(input.patterns)) {
         pattern <- paste(input.patterns, collapse = "|")
@@ -136,17 +138,6 @@ create.formula <-
       inclusion.table <-
         data.table(variable = unique.names)[!is.na(variable)]
 
-      if (is.null(variables.to.exclude)) {
-        num.from.variables.to.exclude <- 0
-      }
-
-      if (!is.null(variables.to.exclude)) {
-        if (is.na(variables.to.exclude[1])) {
-          num.from.variables.to.exclude <- 0
-        }
-        num.from.variables.to.exclude <-
-          length(variables.to.exclude[!is.na(variables.to.exclude)])
-      }
 
       if (is.null(input.names)) {
         num.from.input.names <- 0
@@ -257,18 +248,18 @@ create.formula <-
       inclusion.table[, include.variable := rowMeans(.SD, na.rm = TRUE) == 0, .SDcols = exclusion.columns]
 
       if (force.main.effects == TRUE) {
-        all.input.names <-
+        input.names <-
           inclusion.table[include.variable == TRUE, variable]
       }
 
       if (force.main.effects == FALSE) {
-        all.input.names <-
+        input.names <-
           inclusion.table[include.variable == TRUE &
                             specified.from != "interactions", variable]
       }
 
       if (order.as == "column.order") {
-        all.input.names <- names(dat)[names(dat) %in% all.input.names]
+        input.names <- names(dat)[names(dat) %in% input.names]
       }
 
       # Compute included.interactions
@@ -318,38 +309,25 @@ create.formula <-
         interaction.terms <- NULL
       }
 
-      all.input.names <- input.names
       inclusion.table <- data.table()
       interactions.table <- data.table()
 
-      if (is.null(dat)) {
-        inclusion.table.statement <-
-          "dat was not provided (NA); no inclusion table was computed."
-        interactions.table.statement <-
-          "dat was not provided (NA); no interactions.table object was computed."
-      }
-      if (!is.null(dat)) {
-        inclusion.table.statement <-
-          "dat was not a data.frame; no inclusion table was computed."
-        interactions.table.statement <-
-          "dat was not a data.frame; no interactions.table object was computed."
-      }
     }
 
-    if (length(c(all.input.names[!is.null(all.input.names)], interaction.terms[!is.null(interaction.terms)])) == 0) {
-      all.input.names <- "1"
+    if (length(c(input.names[!is.null(input.names)], interaction.terms[!is.null(interaction.terms)])) == 0) {
+      input.names <- "1"
     }
 
     if (order.as == "increasing") {
-      all.input.names <- sort(x = all.input.names, decreasing = FALSE)
+      input.names <- sort(x = input.names, decreasing = FALSE)
     }
 
     if (order.as == "decreasing") {
-      all.input.names <- sort(x = all.input.names, decreasing = TRUE)
+      input.names <- sort(x = input.names, decreasing = TRUE)
     }
 
     input.names.delineated <-
-      add.backtick(x =  all.input.names, include.backtick = include.backtick)
+      add.backtick(x =  input.names, include.backtick = include.backtick)
 
     outcome.name.delineated <-
       add.backtick(x = outcome.name, include.backtick = include.backtick)
@@ -441,7 +419,7 @@ reduce.existing.formula <-
 
     w.int <- grep(pattern = "\\*", x = the.pieces.trimmed)
     w.input <-
-      (1:length(the.pieces.trimmed))[!((1:length(the.pieces.trimmed)) %in% w.int)]
+      (seq_along(the.pieces.trimmed))[!((seq_along(the.pieces.trimmed)) %in% w.int)]
 
     if (length(w.input) == 0) {
       input.names <- NULL
