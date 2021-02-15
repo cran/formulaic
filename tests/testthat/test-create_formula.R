@@ -86,24 +86,21 @@ interaction.form <-
 
 test_that('outcome error',
           {
-            expect_equal(
+            expect_error(
               formulaic::create.formula(
                 input.names = 'y',
                 outcome.name = 'x',
                 dat = snack.dat
-              ),
-              "Error:  To create a formula, the outcome.name must match one of the values in names(dat)."
+              )
             )
-            expect_equal(
+            expect_error(
               formulaic::create.formula(
                 input.names = 'y',
                 outcome.name = 'x',
                 dat = test
-              ),
-              "Error:  dat must be an object with specified names."
+              )
             )
           })
-
 
 test_that(
   'Interaction outcome',

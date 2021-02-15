@@ -5,6 +5,10 @@ knitr::opts_chunk$set(
 )
 
 ## ----setup, echo=FALSE--------------------------------------------------------
+library(formulaic)
+library(data.table)
+library(knitr)
+#library(DT)
 data("snack.dat", package = "formulaic")
 
 ## ----constant,echo=FALSE------------------------------------------------------
@@ -29,16 +33,23 @@ max.outcome.categories.to.search <- 4
 order.as <- "as.specified"
 include.backtick <- "as.needed"
 format.as <- "formula"
-
 force.main.effects <- TRUE
+outcome.name = awareness.name
+reduce = TRUE
+interactions = list(c(gender.name, income.group.name))
+input.patterns = NULL
+force.main.effects = TRUE
+variables.to.exclude = NULL
+include.intercept = TRUE
+dat = snack.dat
 
 ## ----example------------------------------------------------------------------
 awareness.name = "Awareness"
 variable.names = c("Age", "Gender", "Income Group", "Region", "Persona", "Typo")
 
 ex.form <-
-  formulaic::create.formula(outcome.name = awareness.name,
-                 input.names = 'variable.names',
+  create.formula(outcome.name = awareness.name,
+                 input.names = variable.names,
                  dat = snack.dat)
 
 ex.form$formula
@@ -49,56 +60,67 @@ summary(lm_example)
 user.outcome.name <- "Satisfaction"
 user.input.names <- c('Age Group', 'Gender', 'Region')
 
-formulaic::create.formula(outcome.name = user.outcome.name, input.names = user.input.names)$formula
+create.formula(outcome.name = user.outcome.name, input.names = user.input.names)$formula
 
 ## ----dataset------------------------------------------------------------------
 list(dim(snack.dat), names(snack.dat))
 
-## ----formulaic::add.backtick example------------------------------------------
+## ----add.backtick example-----------------------------------------------------
 as.needed = formulaic::add.backtick(x = names(snack.dat), include.backtick = 'as.needed')
-all = formulaic::add.backtick(x = names(snack.dat), include.backtick = 'all')
+all = formulaic:::add.backtick(x = names(snack.dat), include.backtick = 'all')
+
 
 data = cbind(as.needed, all)
+list(data)
 
-## ----formulaic::add.backtick example 2----------------------------------------
-formulaic::create.formula(outcome.name = awareness.name, input.names = variable.names)$formula
+## ----add.backtick example 2---------------------------------------------------
+create.formula(outcome.name = awareness.name, input.names = variable.names)$formula
 
-## ----formulaic::add.backtick example 3----------------------------------------
-formulaic::create.formula(
+## ----add.backtick example 3---------------------------------------------------
+create.formula(
   outcome.name = awareness.name,
   input.names = variable.names,
   format.as = "character",
   include.backtick = "all"
 )$formula
 
-## ----formulaic::add.backtick example 4----------------------------------------
-formulaic::create.formula(
+## ----add.backtick example 4---------------------------------------------------
+create.formula(
   outcome.name = awareness.name,
   input.names = variable.names,
   format.as = "character",
   include.backtick = "all"
 )$formula
 
-## ----formulaic::create.formula examples basic---------------------------------
+## ----add.backtick example 5---------------------------------------------------
+create.formula(
+  outcome.name = awareness.name,
+  input.names = c(region.name, gender.name, sprintf("sqrt(%s^2)", age.name), income.group.name, "ldkao"),
+  format.as = "character", 
+  include.backtick = "as.needed"
+)$formula
 
+
+## ----create.formula examples basic--------------------------------------------
+outcome.name.awareness <- "Awareness"
 input.names <-
   c("Age", "Gender", "Income", "Region", "Persona", "Typo")
 
 basic.form <-
-  formulaic::create.formula(outcome.name = awareness.name,
+  create.formula(outcome.name = outcome.name.awareness,
                  input.names = input.names,
                  dat = snack.dat)
 
 print(basic.form)
 
-## ----formulaic::create.formula example interactions---------------------------
+## ----create.formula example interactions--------------------------------------
 interactions = list(c("Age Group", "Gender"),
                     c("Age Group", "Region"),
                     c("Age Group", "Gender", "Region"))
 
 interaction.form <-
-  formulaic::create.formula(
-    outcome.name = awareness.name,
+  create.formula(
+    outcome.name = outcome.name.awareness,
     input.names = input.names,
     dat = snack.dat,
     interactions = interactions
@@ -106,13 +128,13 @@ interaction.form <-
 
 print(interaction.form)
 
-## ----formulaic::create.formula example input.patterns-------------------------
+## ----create.formula example input.patterns------------------------------------
 bp.pattern = "BP_"
 input.patterns = c("Gend", bp.pattern)
 
 pattern.form <-
-  formulaic::create.formula(
-    outcome.name = awareness.name,
+  create.formula(
+    outcome.name = outcome.name.awareness,
     input.names = input.names,
     dat = snack.dat,
     input.patterns = input.patterns
@@ -120,27 +142,27 @@ pattern.form <-
 
 print(pattern.form)
 
-## ----formulaic::create.formula example dot.1----------------------------------
+## ----create.formula example dot.1---------------------------------------------
 dot.form.1 <-
-  formulaic::create.formula(outcome.name = awareness.name,
+  create.formula(outcome.name = outcome.name.awareness,
                  input.names = ".",
                  dat = snack.dat)
 
 print(dot.form.1)
 
-## ----formulaic::create.formula example dot.2----------------------------------
+## ----create.formula example dot.2---------------------------------------------
 
 input.names = c("Gender", ".")
 
-dot.form.2 <- formulaic::create.formula(outcome.name = awareness.name, input.names = input.names, dat = snack.dat)
+dot.form.2 <- create.formula(outcome.name = outcome.name.awareness, input.names = input.names, dat = snack.dat)
 
 print(dot.form.2)
 
-## ----formulaic::create.formula example dot.3----------------------------------
+## ----create.formula example dot.3---------------------------------------------
 
 input.names = c("Typo", ".")
 
-dot.form.2 <- formulaic::create.formula(outcome.name = awareness.name, input.names = input.names, dat = snack.dat)
+dot.form.2 <- create.formula(outcome.name = outcome.name.awareness, input.names = input.names, dat = snack.dat)
 
 print(dot.form.2)
 
@@ -165,8 +187,8 @@ bp.pattern = "BP_"
 variables.to.exclude = c("BP_Delicious_0_10", "Gender")
 
 variables.to.exclude.form <-
-  formulaic::create.formula(
-    outcome.name = awareness.name,
+  create.formula(
+    outcome.name = outcome.name.awareness,
     input.names = input.names,
     interactions = interactions,
     input.patterns = bp.pattern,
@@ -177,25 +199,25 @@ variables.to.exclude.form <-
 
 print(variables.to.exclude.form)
 
-## ----formulaic::create.formula outcomes as inputs-----------------------------
+## ----create.formula outcomes as inputs----------------------------------------
 input.names <- c("Income", "Age", "Income")
 income.name = "Income"
 
 outcomes.as.inputs.form <-
-  formulaic::create.formula(outcome.name = income.name,
+  create.formula(outcome.name = income.name,
                  input.names = input.names,
                  dat = snack.dat)
 
 print(outcomes.as.inputs.form)
 
-## ----formulaic::create.formula example duplicated.inputs and interactions-----
+## ----create.formula example duplicated.inputs and interactions----------------
 duplicated.inputs <- c(rep.int(x = "Age", times = 2), "Income")
 duplicated.interactions <-
   list(c("Age", "Income"), c("Age", "Income"))
 
 duplicated.form <-
-  formulaic::create.formula(
-    outcome.name = awareness.name,
+  create.formula(
+    outcome.name = outcome.name.awareness,
     input.names = duplicated.inputs,
     interactions = duplicated.interactions,
     dat = snack.dat
@@ -203,17 +225,17 @@ duplicated.form <-
 
 print(duplicated.form)
 
-## ----formulaic::create.formula example with typo------------------------------
+## ----create.formula example with typo-----------------------------------------
 input.names <- c("Age", "Typo")
 income.name <- "Income"
 
 formula.with.typo <-
-  formulaic::create.formula(outcome.name = income.name, input.names = input.names)
+  create.formula(outcome.name = income.name, input.names = input.names)
 print(formula.with.typo)
 
-## ----formulaic::create.formula example without typo---------------------------
+## ----create.formula example without typo--------------------------------------
 formula.without.typo <-
-  formulaic::create.formula(outcome.name = income.name,
+  create.formula(outcome.name = income.name,
                  input.names = input.names,
                  dat = snack.dat)
 print(formula.without.typo)
@@ -223,7 +245,7 @@ snack.dat[, .N, keyby = c("Awareness", "Consideration")]
 
 ## ----lack of contrast example numerical variables-----------------------------
 formula.consideration <-
-  formulaic::create.formula(outcome.name = consideration.name,
+  create.formula(outcome.name = consideration.name,
                  input.names = c(age.name, awareness.name))
 
 print(formula.consideration$formula)
@@ -232,9 +254,9 @@ glm(formula = formula.consideration,
     data = snack.dat,
     family = "binomial")$coefficients
 
-## ----formulaic::create.formula with lack of contrast categorical 1------------
+## ----create.formula with lack of contrast categorical 1-----------------------
 formula.consideration <-
-  formulaic::create.formula(
+  create.formula(
     outcome.name = consideration.name,
     input.names = c(age.name, awareness.name),
     dat = snack.dat,
@@ -245,16 +267,16 @@ print(formula.consideration)
 
 ## ----lack of contrast example categorical variables 0-------------------------
 formula.awareness <-
-  formulaic::create.formula(outcome.name = awareness.name,
+  create.formula(outcome.name = awareness.name,
                  input.names = c(age.group.name, gender.name))
 
 print(formula.awareness$formula)
 
-## ----formulaic::create.formula with lack of contrast 2, eval=FALSE, include=TRUE----
+## ----create.formula with lack of contrast 2, eval=FALSE, include=TRUE---------
 #  
 #  
 #  formula.awareness <-
-#    formulaic::create.formula(
+#    create.formula(
 #      outcome.name = awareness.name,
 #      input.names = c(age.group.name, gender.name),
 #      dat = snack.dat[get(age.group.name) == "[ 18, 35)", ],
@@ -265,7 +287,7 @@ print(formula.awareness$formula)
 
 ## ----create.fomula lack of contrast 3-----------------------------------------
 formula.consideration.1 <-
-  formulaic::create.formula(
+  create.formula(
     outcome.name = consideration.name,
     input.names = c(age.group.name, gender.name, awareness.name),
     dat = snack.dat,
@@ -275,9 +297,9 @@ formula.consideration.1 <-
 
 print(formula.consideration.1)
 
-## ----formulaic::create.formula lack of contrast 4-----------------------------
+## ----create.formula lack of contrast 4----------------------------------------
 formula.consideration.2 <-
-  formulaic::create.formula(
+  create.formula(
     outcome.name = consideration.name,
     input.names = c(age.group.name, gender.name, awareness.name),
     dat = snack.dat,
@@ -287,8 +309,8 @@ formula.consideration.2 <-
 
 print(formula.consideration.2)
 
-## ----formulaic::create.formula large volume of categorical variables 01-------
-formulaic::create.formula(
+## ----create.formula large volume of categorical variables 01------------------
+create.formula(
   outcome.name = satisfaction.name,
   input.names = c(age.name, income.name, region.name, id.name),
   dat = snack.dat,
@@ -296,9 +318,9 @@ formulaic::create.formula(
   max.input.categories = 30
 )$formula
 
-## ----formulaic::create.formula large volume of categorical variables----------
-formulaic::create.formula(
-  outcome.name = awareness.name,
+## ----create.formula large volume of categorical variables---------------------
+create.formula(
+  outcome.name = income.name,
   input.names = ".",
   reduce = TRUE,
   dat = snack.dat,
@@ -306,10 +328,42 @@ formulaic::create.formula(
 )$formula
 
 
-## ----formulaic::reduce.existing.formula example-------------------------------
-the.initial.formula <- Awareness ~ .
+## ----create.formula transformation 1------------------------------------------
 
-formulaic::reduce.existing.formula(
+create.formula(
+  outcome.name = income.name,
+  input.names = c(region.name, gender.name, sprintf("sqrt(%s^2) * log(%s)", age.name, income.name), income.group.name, "ldkao"),
+  reduce = TRUE,
+  interactions = list(c(gender.name, income.group.name)),
+  input.patterns = NULL,
+  force.main.effects = TRUE,
+  max.input.categories = 20,
+  max.outcome.categories.to.search = 4,
+  order.as = "as.specified",
+  include.backtick = "as.needed",
+  format.as = "formula",
+  variables.to.exclude = NULL,
+  include.intercept = TRUE,
+  dat = snack.dat
+)$formula
+
+
+## ----create.formula transformation 2------------------------------------------
+
+res <- create.formula(outcome.name = outcome.name, input.names = input.names, interactions = interactions, dat = snack.dat, reduce = reduce)
+
+
+res <- create.formula(outcome.name = awareness.name, input.names = input.names, interactions = interactions, dat = snack.dat, reduce = TRUE)
+
+
+glm(formula = res$formula, data = snack.dat, family = "binomial")
+
+res
+
+## ----reduce.existing.formula example------------------------------------------
+the.initial.formula <- 'Income ~ .'
+
+reduce.existing.formula(
   the.initial.formula = the.initial.formula,
   dat = snack.dat,
   max.input.categories = 30
